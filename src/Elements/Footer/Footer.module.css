@@ -1,3 +1,7 @@
+.todoListFooter {
+    grid-area: bar;
+}
+
 .button {
     margin: 10px;
 }
@@ -11,4 +15,10 @@
 .todoListFooter > * {
     margin: 10px;
 
+}
+
+.teg {
+    border: darkgreen solid 1px;
+    border-radius: 5px;
+    padding: 5px 10px;
 }

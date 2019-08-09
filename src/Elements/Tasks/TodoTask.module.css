@@ -1,5 +1,10 @@
 .todoListTask {
-
+    margin-top: 4px;
+    border: deepskyblue solid 1px;
+    border-radius: 5px;
+    padding: 2px 10px;
+    grid-template-columns: 15px 1fr 90px 90px;
+    display: grid;
 }
 
 .todoListTask span{
@@ -7,17 +12,29 @@
 }
 
 .todoListTaskDone {
-    opacity: 0.5;
+    margin-top: 4px;
+    border: darkorange solid 1px;
+    border-radius: 5px;
+    padding: 2px 10px;
+    color: olive;
+    grid-template-columns: 15px 1fr 90px 90px;
+    display: grid;
 }
 
 .todoListTaskDone span {
     margin-left: 15px;
+
 }
 
 .field {
-
+    margin-left: 15px;
+    background-color: black;
+    border: none;
+    color: white;
 }
 
 .fieldWarning {
     border-color: red;
+    background-color: black;
+    color: white;
 }

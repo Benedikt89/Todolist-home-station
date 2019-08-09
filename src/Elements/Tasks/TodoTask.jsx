@@ -13,18 +13,23 @@ class TodoTask extends React.Component {
     };
 
     deactivateEditMode = () => {
-
         if (this.props.task.title === ""){
-            this.setState({ifWarning: style.fieldWarning});
             this.setState({editMode: true});
+        } else {
+            this.setState({editMode: false})
         }
-        this.setState({editMode: false})
     };
 
     render = (props) => {
 
         let checkBoxClick = (e) => {
             this.props.isDoneBox(e.currentTarget.checked, this.props.task.id);
+        };
+
+        let confirmChangeOnEnter = (e) => {
+            if (e.key === 'Enter') {
+                this.deactivateEditMode();
+            }
         };
 
         let taskChange = (e) => {
@@ -39,12 +44,6 @@ class TodoTask extends React.Component {
 
         let styleIsdone = () => this.props.task.isDone === true ? style.todoListTaskDone: style.todoListTask;
 
-        let fieldEmptyError = () => {
-            if (this.props.task.id !='') {
-                this.setState({ifWarning: style.field})
-            }
-        };
-
         return (
 
                 <div className={styleIsdone()}>
@@ -55,7 +54,8 @@ class TodoTask extends React.Component {
 
                     { this.state.editMode
                         ? <input
-                            className={fieldEmptyError}
+                            onKeyPress={confirmChangeOnEnter}
+                            className={this.state.ifWarning}
                             autoFocus={true}
                             value={this.props.task.title}
                             onChange={taskChange}

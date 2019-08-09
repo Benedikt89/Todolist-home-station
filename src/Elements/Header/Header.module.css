@@ -1,13 +1,22 @@
 .error {
-    border-color: red;
+    border: red solid 1px;
+    border-radius: 5px;
+    padding: 5px 10px;
     margin: 10px;
+    background-color: black;
+    color: white;
 }
 .textField {
+    border: #00fdb5 solid 1px;
+    border-radius: 5px;
+    padding: 5px 10px;
     margin: 10px;
+    background-color: black;
+    color: white;
 }
 
 .todoListHeader {
-
+    grid-area: header;
 }
 
 .todoListHeaderTitle {
@@ -15,5 +24,15 @@
 }
 
 .todoListNewTaskForm {
+    border: red solid 1px;
+    border-radius: 5px;
+    padding: 8px 15px;
 
+}
+
+.teg {
+    margin-left: 15px;
+    border: darkgreen solid 1px;
+    border-radius: 5px;
+    padding: 5px 10px;
 }

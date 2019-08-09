@@ -7,6 +7,44 @@ import TodoTask from "./Elements/Tasks/TodoTask";
 
 class App extends React.Component {
 
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        this.restoreState();
+    }
+
+    saveState = () => {
+        let stateAsString = JSON.stringify(this.state);
+        localStorage.setItem("our-state", stateAsString);
+    };
+
+    restoreState = () => {
+        let state = {
+            tasks: [],
+
+            textField: '',
+            filterValue: 'All',
+        };
+
+        let stateAsString = localStorage.getItem("our-state");
+        if (stateAsString != null) {
+            state = JSON.parse(stateAsString);
+        }
+        this.setState(state);
+    };
+
+    clearState = () => {
+        let state = {
+            tasks: [],
+            textField: '',
+            filterValue: 'All',
+        };
+        alert('cleared');
+        this.setState(state,()=> { this.saveState(); });
+    };
+
     state = {
         tasks: [
             // {id: 0,title: 'CSS', isDone: true, priority: 'low'},
@@ -31,7 +69,7 @@ class App extends React.Component {
             }
         });
 
-        this.setState({tasks: newTasks})
+        this.setState({tasks: newTasks}, () => { this.saveState(); });
     };
 
     changeStatus = (isDone, taskId) =>{
@@ -40,12 +78,12 @@ class App extends React.Component {
 
     textHolder = (text) => {
         let newText = text;
-        this.setState({textField: newText})
+        this.setState({textField: newText}, () => { this.saveState(); });
     };
 
     buttonFilter = (text) => {
         let newFilter = text;
-        this.setState({selectedFilter: newFilter})
+        this.setState({selectedFilter: newFilter}, () => { this.saveState(); });
     };
 
     addNewTask = () => {
@@ -55,11 +93,11 @@ class App extends React.Component {
             isDone: false,
             priority: 'low'
         };
-        let newTasks = [...this.state.tasks, newTask];
+        let newTasks = [newTask, ...this.state.tasks];
 
-        this.setState({tasks: newTasks});
+        this.setState({tasks: newTasks, textField: ''}, ()=> { this.saveState(); });
 
-        this.setState( {textField: ''});
+   //     this.setState( {textField: ''});
 
     };
 
@@ -80,6 +118,7 @@ class App extends React.Component {
                         textHolder={this.textHolder}
                         taskFieldContent={this.state.textField}
                         addNewTask={this.addNewTask}
+                        clearState={this.clearState}
                     />
 
                     <TodoTasks

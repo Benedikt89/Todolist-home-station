@@ -3,11 +3,18 @@
 }
 
 .todoList {
-  width: 500px;
+  width: 600px;
   margin: 0 auto;
+  grid-template-areas:
+          ". header"
+          "bar tasks";
+  display: grid;
 }
 
 .todoList > div {
   padding: 10px;
 }
 
+.todoListTasks {
+  grid-area: tasks;
+}

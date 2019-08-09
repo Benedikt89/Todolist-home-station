@@ -49,6 +49,8 @@ class Header extends React.Component {
                         onKeyPress={inputOnEnter}
                     />
                     <button onClick={addClick}>Add</button>
+
+                    <span className={style.teg} onClick={this.props.clearState}>Empty State</span>
                 </div>
             </div>
 
