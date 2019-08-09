@@ -1,17 +1,18 @@
 import React from 'react';
 import './App.css';
-import Footer from "./Footer";
-import Header from "./Header";
-import TodoTasks from "./TodoTasks";
-import TodoTask from "./TodoTask";
+import Footer from "./Elements/Footer/Footer";
+import Header from "./Elements/Header/Header";
+import TodoTasks from "./Elements/Tasks/TodoTasks";
+import TodoTask from "./Elements/Tasks/TodoTask";
 
 class App extends React.Component {
 
     state = {
         tasks: [
-            {title: 'CSS', isDone: false},
-            {title: 'html', isDone: true},
-            {title: 'react', isDone: false},
+            // {id: 0,title: 'CSS', isDone: true, priority: 'low'},
+            // {id: 1,title: 'html', isDone: true, priority: 'low'},
+            // {id: 2,title: 'react', isDone: false, priority: 'Hi'},
+            // {id: 3,title: 'JS', isDone: false, priority: 'Regular'},
         ],
 
         textField: '',
@@ -19,27 +20,22 @@ class App extends React.Component {
         selectedFilter: 'All',
     };
 
-//     let newUsers = [];
-//
-//     this.names.map((name, index) => {
-//     let user = {name: name, age: this.ages[index]}
-//     newUsers.push(user)
-// })
-//
-// let usersList = newUsers.map(n => <p>`User {n.name} is years {n.age} old.`</p>)
+    changeTask =(taskId, obj) => {
 
+        let newTasks = this.state.tasks.map(task => {
+            if (task.id!=taskId) {
+                return task;
+            }
+            else {
+                return {...task, ...obj};
+            }
+        });
 
-changeStatus = (input) =>{
-        let newTasks = this.state.tasks.map( task => {
-                // eslint-disable-next-line no-unused-expressions
-        if (task.title === input.title) {task.isDone === true ? task.isDone === false : task.isDone === true}
-        }
-        );
+        this.setState({tasks: newTasks})
+    };
 
-console.log(newTasks);
-        console.log(input);
-
-        this.setState({tasks: newTasks});
+    changeStatus = (isDone, taskId) =>{
+        this.changeTask(taskId, {isDone: isDone});
     };
 
     textHolder = (text) => {
@@ -49,19 +45,26 @@ console.log(newTasks);
 
     buttonFilter = (text) => {
         let newFilter = text;
-        console.log(this.state.selectedFilter);
         this.setState({selectedFilter: newFilter})
     };
 
     addNewTask = () => {
         let newTask = {
+            id: this.state.tasks.length +1,
             title: this.state.textField,
-            isDone: false
+            isDone: false,
+            priority: 'low'
         };
         let newTasks = [...this.state.tasks, newTask];
+
         this.setState({tasks: newTasks});
-        console.log('task added');
-        this.state.textField = '';
+
+        this.setState( {textField: ''});
+
+    };
+
+    changeTitle = (text, taskId) => {
+        this.changeTask(taskId, {title: text});
     };
 
     render = () => {
@@ -75,11 +78,12 @@ console.log(newTasks);
                 <div className="todoList">
                     <Header
                         textHolder={this.textHolder}
+                        taskFieldContent={this.state.textField}
                         addNewTask={this.addNewTask}
                     />
 
                     <TodoTasks
-
+                        changeTitle={this.changeTitle}
                         isDoneBox={this.changeStatus}
                         tasks={this.state.tasks.filter(t => {
 

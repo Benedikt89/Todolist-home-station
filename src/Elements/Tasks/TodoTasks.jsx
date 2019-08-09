@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import '../../App.css';
 import TodoTask from "./TodoTask";
 
 class TodoTasks extends React.Component {
@@ -11,6 +11,7 @@ class TodoTasks extends React.Component {
             task => <TodoTask
                 task = {task}
                 isDoneBox={this.props.isDoneBox}
+                changeTitle={this.props.changeTitle}
             />
         );
 
