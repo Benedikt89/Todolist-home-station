@@ -1,0 +1,23 @@
+.todoListTask {
+
+}
+
+.todoListTask span{
+    margin-left: 15px;
+}
+
+.todoListTaskDone {
+    opacity: 0.5;
+}
+
+.todoListTaskDone span {
+    margin-left: 15px;
+}
+
+.field {
+
+}
+
+.fieldWarning {
+    border-color: red;
+}
