@@ -1,15 +1,10 @@
 import React from 'react';
 import './App.css';
-import Footer from "./Elements/Footer/Footer";
+import TodoList from "./TodoList";
+import AddItem from "./Elements/AddItem/AddItem";
 import Header from "./Elements/Header/Header";
-import TodoTasks from "./Elements/Tasks/TodoTasks";
-import TodoTask from "./Elements/Tasks/TodoTask";
 
 class App extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.restoreState();
@@ -17,127 +12,64 @@ class App extends React.Component {
 
     saveState = () => {
         let stateAsString = JSON.stringify(this.state);
-        localStorage.setItem("our-state", stateAsString);
+        localStorage.setItem("lists-state", stateAsString);
     };
-
     restoreState = () => {
         let state = {
-            tasks: [],
-
+            lists: [
+                {id: 1,title: 'today'},
+            ],
             textField: '',
-            filterValue: 'All',
         };
 
-        let stateAsString = localStorage.getItem("our-state");
+        let stateAsString = localStorage.getItem("lists-state");
         if (stateAsString != null) {
             state = JSON.parse(stateAsString);
         }
         this.setState(state);
     };
 
-    clearState = () => {
-        let state = {
-            tasks: [],
-            textField: '',
-            filterValue: 'All',
-        };
-        alert('cleared');
-        this.setState(state,()=> { this.saveState(); });
-    };
-
     state = {
-        tasks: [
-            // {id: 0,title: 'CSS', isDone: true, priority: 'low'},
-            // {id: 1,title: 'html', isDone: true, priority: 'low'},
-            // {id: 2,title: 'react', isDone: false, priority: 'Hi'},
-            // {id: 3,title: 'JS', isDone: false, priority: 'Regular'},
+        lists: [
+            {id: 1,title: 'today',},
         ],
 
         textField: '',
-
-        selectedFilter: 'All',
     };
 
-    changeTask =(taskId, obj) => {
+    addNewList = () => {
+        let newList = {
+            id: this.state.lists.length +1,
+            title: this.state.textField,
+        };
+        let newLists = [newList, ...this.state.lists];
 
-        let newTasks = this.state.tasks.map(task => {
-            if (task.id!=taskId) {
-                return task;
-            }
-            else {
-                return {...task, ...obj};
-            }
-        });
-
-        this.setState({tasks: newTasks}, () => { this.saveState(); });
-    };
-
-    changeStatus = (isDone, taskId) =>{
-        this.changeTask(taskId, {isDone: isDone});
+        this.setState({lists: newLists, textField: ''}, ()=> { this.saveState(); });
     };
 
     textHolder = (text) => {
         let newText = text;
-        this.setState({textField: newText}, () => { this.saveState(); });
-    };
-
-    buttonFilter = (text) => {
-        let newFilter = text;
-        this.setState({selectedFilter: newFilter}, () => { this.saveState(); });
-    };
-
-    addNewTask = () => {
-        let newTask = {
-            id: this.state.tasks.length +1,
-            title: this.state.textField,
-            isDone: false,
-            priority: 'low'
-        };
-        let newTasks = [newTask, ...this.state.tasks];
-
-        this.setState({tasks: newTasks, textField: ''}, ()=> { this.saveState(); });
-
-   //     this.setState( {textField: ''});
-
-    };
-
-    changeTitle = (text, taskId) => {
-        this.changeTask(taskId, {title: text});
+        this.setState({textField: newText}, () => { this.saveState() });
     };
 
     render = () => {
 
+        let todoLists = this.state.lists.map(l => <TodoList label={l.title} id={l.id} />);
 
         return (
 
 
-            <div className="App">
-
-                <div className="todoList">
-                    <Header
+            <div className="">
+                <header>
+                    <AddItem
+                        itemFieldContent={this.state.textField}
                         textHolder={this.textHolder}
-                        taskFieldContent={this.state.textField}
-                        addNewTask={this.addNewTask}
-                        clearState={this.clearState}
+                        addNewItem={this.addNewList}
                     />
+                </header>
 
-                    <TodoTasks
-                        changeTitle={this.changeTitle}
-                        isDoneBox={this.changeStatus}
-                        tasks={this.state.tasks.filter(t => {
-
-                    if (this.state.selectedFilter === 'Active') {
-                        return t.isDone === false;
-                    }else if (this.state.selectedFilter === 'Completed') {
-                        return t.isDone === true;
-                    } else{
-                        return true;
-                    }
-                    })}
-                        />
-                    <Footer
-                        buttonFilter={this.buttonFilter}
-                        selectedFilter={this.state.selectedFilter}/>
+                <div className="App">
+                    {todoLists}
                 </div>
 
             </div>

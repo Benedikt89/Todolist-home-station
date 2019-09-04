@@ -1,5 +1,7 @@
 .todoListFooter {
     grid-area: bar;
+    grid-template-rows: 50px;
+    display: grid;
 }
 
 .button {

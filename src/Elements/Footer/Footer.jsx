@@ -35,36 +35,35 @@ class Footer extends React.Component {
         return (
             <div className={style.todoListFooter}>
                 {!this.state.isHidden && <div>
-                    <div>
                     <button
                         onClick={onAllFilterClick}
                         className={ifCheckedAll()}
                     >All
                     </button>
-                    </div>
 
-                    <div>
+
+
                     <button
                         onClick={onCompletedFilterClick}
                         className={ifCheckedCompleted()}
                     >Completed
                     </button>
-                    </div>
 
-                    <div>
+
+
                     <button
                         onClick={onActiveFilterClick}
                         className={ifCheckedActive()}
                     >Active
                     </button>
-                    </div>
 
-                    <div>
+
+
                     <span
                         className={style.teg}
                         onClick={hideClick}
                     >HIDE</span>
-                    </div>
+
                 </div>}
 
                 {this.state.isHidden && <span
