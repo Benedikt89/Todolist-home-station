@@ -10,6 +10,7 @@ class Header extends React.Component {
         return (
             <div className={style.todoListHeader}>
                 <h3 className={style.todoListHeaderTitle}>{this.props.label}</h3>
+                <button onClick={this.props.deleteList}>x</button>
 
                 <AddItem
                     itemFieldContent={this.props.taskFieldContent}
