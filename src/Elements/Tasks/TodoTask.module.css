@@ -1,42 +1,50 @@
-.todoListTask {
-    margin-top: 4px;
-    align-items: center;
-    border: deepskyblue solid 1px;
-    border-radius: 5px;
-    padding: 2px 10px;
-    grid-template-columns: 15px 1fr 90px 90px 45px;
+.todoListTask
+{
+    position: relative;
+
     display: grid;
+    align-items: center;
+
+    composes: todoListTask from './../../App.css';
+    grid-template-columns: 15px 1fr 90px 90px 45px;
 }
 
-.todoListTask span{
+.todoListTask span
+{
     margin-left: 15px;
 }
 
-.todoListTaskDone {
-    margin-top: 4px;
-    align-items: center;
-    border: darkorange solid 1px;
-    border-radius: 5px;
-    padding: 2px 10px;
+.todoListTaskDone
+{
     color: olive;
-    grid-template-columns: 15px 1fr 90px 90px 45px;
-    display: grid;
+    border: darkorange solid 1px;
+
+    composes: todoListTask from './../../App.css';
+    composes: todoListTask;
 }
 
-.todoListTaskDone span {
+.todoListTaskDone span
+{
     margin-left: 10px;
-
 }
 
-.field {
+.field
+{
     margin-left: 15px;
-    background-color: black;
-    border: none;
+
     color: white;
+    border: none;
+    background-color: black;
 }
 
-.fieldWarning {
+.fieldWarning
+{
+    color: white;
     border-color: red;
     background-color: black;
-    color: white;
+}
+.deleteTask
+{
+    box-sizing: border-box;
+    padding: 2px 4px;
 }

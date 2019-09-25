@@ -1,32 +1,67 @@
-.App {
-    color: white;
+.App
+{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+
+    color: white;
 }
 
-.todoList {
-    width: 400px;
-    grid-template-areas: "header" "tasks" "bar";
+.todoList
+{
+    position: relative;
+
     display: grid;
+
+    width: 400px;
+    margin: 20px;
+
+    box-shadow: 0 0 5px 3px #60ea95;
+
+    grid-template-areas: 'header' 'tasks' 'bar';
 }
 
-.todoList > div {
+.todoList > div
+{
     padding: 10px;
 }
 
-.todoListTasks {
+.todoListTasks
+{
     grid-area: tasks;
 }
-button {
+button
+{
+    margin: 10px;
+    padding: 5px 10px;
+
+    color: white;
     border: #00fd0b solid 3px;
     border-radius: 5px;
-    padding: 5px 10px;
-    margin: 10px;
     background-color: black;
-    color: white;
 }
-button:hover{
-    background-color: darkgreen;
+button:hover
+{
+    opacity: 50%;
     color: white;
+    background-color: darkgreen;
+}
+.textField
+{
+    margin: 10px;
+    padding: 5px 10px;
+
+    color: white;
+    border: #00fdb5 solid 1px;
+    border-radius: 5px;
+    background-color: black;
+}
+.todoListTask
+{
+    box-sizing: border-box;
+    margin-top: 4px;
+    padding: 2px 10px;
+
+    border: deepskyblue solid 1px;
+    border-radius: 5px;
 }

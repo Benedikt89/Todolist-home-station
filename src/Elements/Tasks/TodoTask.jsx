@@ -66,7 +66,7 @@ class TodoTask extends React.Component {
                     >{this.props.task.title}</span>}
                     <span>{' id= '+ this.props.task.id}</span>
                     <span>{this.props.task.priority}</span>
-                    <button onClick={()=>{this.props.deleteTask(this.props.task.id)}}>x</button>
+                    <button className={style.deleteTask} onClick={()=>{this.props.deleteTask(this.props.task.id)}}>x</button>
                 </div>
 
 
