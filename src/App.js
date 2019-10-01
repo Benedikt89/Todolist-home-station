@@ -2,16 +2,15 @@ import React from 'react';
 import './App.css';
 import TodoList from "./TodoList";
 import AddItem from "./Elements/AddItem/AddItem";
-import {addNewListAC} from "./Redux/listsReducer";
+import {addNewList, getLists} from "./Redux/listsReducer";
 import { connect } from 'react-redux'
 
 class App extends React.Component {
 
     componentDidMount() {
-        this.restoreState();
+        this.props.getLists();
     }
-
-    saveState = () => {
+    _saveState = () => {
         let state = {
             lists: this.props.lists,
             textField: '',
@@ -19,7 +18,7 @@ class App extends React.Component {
         let stateAsString = JSON.stringify(state);
         localStorage.setItem("lists-state", stateAsString);
     };
-    restoreState = () => {
+    _restoreState = () => {
         let state = {
             lists: this.props.lists,
             textField: '',
@@ -37,20 +36,21 @@ class App extends React.Component {
     };
 
     addNewList = () => {
-        this.props.addNewListF(this.state.textField);
+        this.props.addNewList(this.state.textField);
+        this.setState({textField: ''});
+    };
 
-        this.setState({textField: ''}, ()=> { this.saveState(); });
+    deleteList = () => {
+
     };
 
     textHolder = (text) => {
-        let newText = text;
-        this.setState({textField: newText}, () => { this.saveState() });
+        this.setState({textField: text});
     };
 
     render = () => {
-        let todoLists = this.props.lists.map(l => <TodoList label={l.title} id={l.id} tasks={l.tasks} />);
+        let todoLists = this.props.lists.map(l => <TodoList label={l.title} id={l.id} tasks={l.tasks ? l.tasks : []} />);
         return (
-
 
             <div className="">
                 <header>
@@ -74,11 +74,7 @@ const mapStateToProps = (state) => {
     return{
         lists: state.lists,
     }};
-const mapDispatchToProps = (dispatch) => {
-    return{
-        addNewListF: (textField) => {dispatch(addNewListAC(textField))},
-    }};
 
-const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
+const ConnectedApp = connect(mapStateToProps, {addNewList, getLists})(App);
 
 export default ConnectedApp;

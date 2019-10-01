@@ -21,9 +21,9 @@ class TodoTask extends React.Component {
     };
 
     render = (props) => {
-
         let checkBoxClick = (e) => {
-            this.props.isDoneBox(e.currentTarget.checked, this.props.task.id);
+            let status = e.currentTarget.checked ? 2 : 0;
+            this.props.changeStatus(status, this.props.task.id);
         };
 
         let confirmChangeOnEnter = (e) => {
@@ -35,22 +35,23 @@ class TodoTask extends React.Component {
         let taskChange = (e) => {
             let text = e.currentTarget.value;
             this.props.changeTitle(text, this.props.task.id);
-            if (text != '') {
+            if (text !== '') {
                 this.setState({ifWarning: style.field});
             } else {
                 this.setState({ifWarning: style.fieldWarning})
             }
         };
 
-        let styleIsdone = () => this.props.task.isDone === true ? style.todoListTaskDone: style.todoListTask;
+        let styleIsdone = () => this.props.task.status === 2 ? style.todoListTaskDone: style.todoListTask;
 
+        let isChecked = this.props.task.status !== 0;
         return (
 
                 <div className={styleIsdone()}>
                     <input
                         onChange={checkBoxClick}
                         type="checkbox"
-                        checked={this.props.task.isDone}/>
+                        checked={isChecked}/>
 
                     { this.state.editMode
                         ? <input
@@ -64,7 +65,7 @@ class TodoTask extends React.Component {
                         : <span
                         onClick={this.activateEditMode}
                     >{this.props.task.title}</span>}
-                    <span>{' id= '+ this.props.task.id}</span>
+                    <span>{' id= '+ this.props.task.status}</span>
                     <span>{this.props.task.priority}</span>
                     <button className={style.deleteTask} onClick={()=>{this.props.deleteTask(this.props.task.id)}}>x</button>
                 </div>

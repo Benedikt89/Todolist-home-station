@@ -3,7 +3,7 @@ import './App.css';
 import Footer from "./Elements/Footer/Footer";
 import Header from "./Elements/Header/Header";
 import TodoTasks from "./Elements/Tasks/TodoTasks";
-import {addNewTaskAC, changeTaskAC, deleteListAC, deleteTaskAC} from "./Redux/listsReducer";
+import {addNewTask, changeTask, deleteList, deleteTask, getTasks} from "./Redux/listsReducer";
 import {connect} from "react-redux";
 
 class TodoList extends React.Component {
@@ -13,13 +13,13 @@ class TodoList extends React.Component {
     }
 
     componentDidMount() {
-        this.restoreState();
+        this.props.getTasks(this.props.id)
     }
-    saveState = () => {
+    _saveState = () => {
        let stateAsString = JSON.stringify(this.state);
         localStorage.setItem("our-state"+this.props.id, stateAsString);
     };
-    restoreState = () => {
+    _restoreState = () => {
         let state = {
             tasks: this.props.tasks,
 
@@ -35,56 +35,35 @@ class TodoList extends React.Component {
     };
 
     state = {
-        tasks: this.props.tasks,
-
         textField: '',
-
         selectedFilter: 'All',
     };
 
     changeTask =(taskId, obj) => {
-        let newTasks = this.props.tasks.map(task => {
-            if (task.id !== taskId) {
+        let newTask = this.props.tasks.find(task => {
+            if (task.id === taskId) {
                 return task;
-            }
-            else {
-                return {...task, ...obj};
-            }
-        });
-        this.props.changeTaskF(newTasks, this.props.id);
+            }});
+        newTask = {...newTask, ...obj};
+        this.props.changeTask(this.props.id, newTask);
     };
 
-    changeStatus = (isDone, taskId) =>{
-        this.changeTask(taskId, {isDone: isDone});
+    changeStatus = (completed, taskId) =>{
+        this.changeTask(taskId, {status: completed});
     };
 
     textHolder = (text) => {
         let newText = text;
-        this.setState({textField: newText}, () => { this.saveState() });
+        this.setState({textField: newText});
     };
 
     buttonFilter = (text) => {
         let newFilter = text;
-        this.setState({selectedFilter: newFilter}, () => { this.saveState() });
+        this.setState({selectedFilter: newFilter});
     };
 
     addNewTask = () => {
-        let idS = this.props.tasks.map(t => t.id).sort(function(a,b){
-            return a - b
-        });
-        let freeId = 0;
-        for (freeId; freeId < this.props.tasks.length +2; freeId++){
-            if (freeId + 1 !== idS[freeId]) {
-                break;
-            }
-        }
-        let newTask = {
-            id: freeId + 1,
-            title: this.state.textField,
-            isDone: false,
-            priority: 'low'
-        };
-        this.props.addNewTaskF(newTask, this.props.id);
+        this.props.addNewTask(this.props.id, this.state.textField);
         this.setState({textField: ''});
     };
 
@@ -94,6 +73,7 @@ class TodoList extends React.Component {
 
     render = () => {
 
+        let tasks = this.props.tasks === undefined ? [] : this.props.tasks;
         return (
 
                 <div className="todoList">
@@ -107,14 +87,14 @@ class TodoList extends React.Component {
 
                     <TodoTasks
                         changeTitle={this.changeTitle}
-                        isDoneBox={this.changeStatus}
-                        deleteTask={(taskId)=>{this.props.deleteTask(taskId, this.props.id)}}
-                        tasks={this.props.tasks.filter(t => {
+                        changeStatus={this.changeStatus}
+                        deleteTask={(taskId)=>{this.props.deleteTask(this.props.id, taskId)}}
+                        tasks={tasks.filter(t => {
 
                     if (this.state.selectedFilter === 'Active') {
-                        return t.isDone === false;
+                        return t.completed === false;
                     }else if (this.state.selectedFilter === 'Completed') {
-                        return t.isDone === true;
+                        return t.completed === true;
                     } else{
                         return true;
                     }
@@ -130,16 +110,7 @@ class TodoList extends React.Component {
     }
 }
 
-
-const mapDispatchToProps = (dispatch) => {
-    return{
-        deleteList: (listId) => {dispatch(deleteListAC(listId))},
-        addNewTaskF: (newTask, listId) => {dispatch(addNewTaskAC(newTask, listId))},
-        changeTaskF: (newTasks, listId) => {dispatch(changeTaskAC(newTasks, listId))},
-        deleteTask: (taskId, listId) => {dispatch(deleteTaskAC(taskId, listId))},
-    }};
-
-const ConnectedTodoList = connect(null, mapDispatchToProps)(TodoList);
+const ConnectedTodoList = connect(null, {deleteList, addNewTask, changeTask, deleteTask, getTasks})(TodoList);
 
 export default ConnectedTodoList;
 
