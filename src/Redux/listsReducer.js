@@ -7,6 +7,8 @@ const DELETE_LIST = 'DELETE_LIST';
 const DELETE_TASK = 'DELETE_TASK';
 const SET_LISTS = 'SET_LISTS';
 const SET_TASKS = 'SET_TASKS';
+const CHANGE_LIST = 'CHANGE_LIST';
+
 
 const initialState = {
     lists: [],
@@ -78,6 +80,20 @@ const listReducer = (state = initialState, action) => {
                 lists: state.lists.filter(l=>{
                     if (l.id !== action.listId) {
                         return l
+                    }
+                })
+            };
+        case CHANGE_LIST:
+            return {
+                ...state,
+                lists: state.lists.map(l=>{
+                    if (l.id === action.listId) {
+                        return {
+                            ...l,
+                            title: action.title
+                        }
+                    }else {
+                        return l;
                     }
                 })
             };
@@ -190,6 +206,14 @@ export const changeTask = (listId, newTask) => (dispatch) => {
         .then(res => {
             if(res.resultCode === 0){
                 dispatch(_changeTask(listId, newTask))
+            }
+        })
+};
+export const changeList = (listId, title) => (dispatch) => {
+    todoListsAPI.changeList(listId, title)
+        .then(res=> {
+            if (res.resultCode === 0){
+                dispatch({type: CHANGE_LIST, title: title, listId});
             }
         })
 };

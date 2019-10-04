@@ -59,4 +59,10 @@ export const todoListsAPI = {
                     return res.data;
             })
     },
+    changeList(todoListId, title){
+        return instance.put(`todo-lists/${todoListId}`, {title})
+            .then(res=>{
+                return res.data;
+            })
+    },
 };

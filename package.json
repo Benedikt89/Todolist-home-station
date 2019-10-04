@@ -33,6 +33,7 @@
     ]
   },
   "devDependencies": {
-    "csscomb": "^4.3.0"
+    "csscomb": "^4.3.0",
+    "redux-devtools-extension": "^2.13.8"
   }
 }

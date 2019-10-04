@@ -31,32 +31,21 @@ class App extends React.Component {
         this.setState(state);
     };
 
-    state = {
-        textField: '',
-    };
-
-    addNewList = () => {
-        this.props.addNewList(this.state.textField);
-        this.setState({textField: ''});
+    addNewList = (title) => {
+        this.props.addNewList(title);
     };
 
     deleteList = () => {
 
     };
 
-    textHolder = (text) => {
-        this.setState({textField: text});
-    };
-
     render = () => {
-        let todoLists = this.props.lists.map(l => <TodoList label={l.title} id={l.id} tasks={l.tasks ? l.tasks : []} />);
+        let todoLists = this.props.lists.map(l => <TodoList title={l.title} id={l.id} tasks={l.tasks ? l.tasks : []} />);
         return (
 
             <div className="">
                 <header>
                     <AddItem
-                        itemFieldContent={this.state.textField}
-                        textHolder={this.textHolder}
                         addNewItem={this.addNewList}
                     />
                 </header>

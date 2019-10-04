@@ -3,7 +3,7 @@ import './App.css';
 import Footer from "./Elements/Footer/Footer";
 import Header from "./Elements/Header/Header";
 import TodoTasks from "./Elements/Tasks/TodoTasks";
-import {addNewTask, changeTask, deleteList, deleteTask, getTasks} from "./Redux/listsReducer";
+import {addNewTask, changeTask, deleteList, deleteTask, getTasks, changeList} from "./Redux/listsReducer";
 import {connect} from "react-redux";
 
 class TodoList extends React.Component {
@@ -35,7 +35,6 @@ class TodoList extends React.Component {
     };
 
     state = {
-        textField: '',
         selectedFilter: 'All',
     };
 
@@ -49,12 +48,7 @@ class TodoList extends React.Component {
     };
 
     changeStatus = (completed, taskId) =>{
-        this.changeTask(taskId, {status: completed});
-    };
-
-    textHolder = (text) => {
-        let newText = text;
-        this.setState({textField: newText});
+        this.changeTask(taskId, {completed: completed});
     };
 
     buttonFilter = (text) => {
@@ -62,13 +56,16 @@ class TodoList extends React.Component {
         this.setState({selectedFilter: newFilter});
     };
 
-    addNewTask = () => {
-        this.props.addNewTask(this.props.id, this.state.textField);
-        this.setState({textField: ''});
+    addNewTask = (text) => {
+        this.props.addNewTask(this.props.id, text);
     };
 
-    changeTitle = (text, taskId) => {
-        this.changeTask(taskId, {title: text});
+    changeTitle = (text, taskId, targetType) => {
+        if (targetType === 'list') {
+            this.props.changeList(taskId, text)
+        } else if (targetType === 'task') {
+            this.changeTask(taskId, {title: text});
+        }
     };
 
     render = () => {
@@ -78,11 +75,12 @@ class TodoList extends React.Component {
 
                 <div className="todoList">
                     <Header
-                        deleteList={()=>{this.props.deleteList(this.props.id)}}
-                        label={this.props.label}
-                        textHolder={this.textHolder}
-                        taskFieldContent={this.state.textField}
+                        deleteList={this.props.deleteList}
+                        title={this.props.title}
+                        id={this.props.id}
                         addNewTask={this.addNewTask}
+                        changeTitle={this.changeTitle}
+
                     />
 
                     <TodoTasks
@@ -110,7 +108,7 @@ class TodoList extends React.Component {
     }
 }
 
-const ConnectedTodoList = connect(null, {deleteList, addNewTask, changeTask, deleteTask, getTasks})(TodoList);
+const ConnectedTodoList = connect(null, {deleteList, addNewTask, changeTask, deleteTask, getTasks, changeList})(TodoList);
 
 export default ConnectedTodoList;
 

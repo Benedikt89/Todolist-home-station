@@ -5,6 +5,7 @@ class TodoTask extends React.Component {
 
     state = {
         editMode: false,
+        newTitle: this.props.task.title,
         ifWarning: style.field,
     };
 
@@ -13,17 +14,17 @@ class TodoTask extends React.Component {
     };
 
     deactivateEditMode = () => {
-        if (this.props.task.title === ""){
+        if (this.state.newTitle === ""){
             this.setState({editMode: true});
         } else {
-            this.setState({editMode: false})
+            this.setState({editMode: false});
+            this.props.changeTitle(this.state.newTitle, this.props.task.id, 'task');
         }
     };
 
     render = (props) => {
         let checkBoxClick = (e) => {
-            let status = e.currentTarget.checked ? 2 : 0;
-            this.props.changeStatus(status, this.props.task.id);
+            this.props.changeStatus(e.currentTarget.checked, this.props.task.id);
         };
 
         let confirmChangeOnEnter = (e) => {
@@ -32,40 +33,38 @@ class TodoTask extends React.Component {
             }
         };
 
-        let taskChange = (e) => {
+        let taskTitleChange = (e) => {
             let text = e.currentTarget.value;
-            this.props.changeTitle(text, this.props.task.id);
             if (text !== '') {
-                this.setState({ifWarning: style.field});
+                this.setState({ifWarning: style.field, newTitle: text});
             } else {
-                this.setState({ifWarning: style.fieldWarning})
+                this.setState({ifWarning: style.fieldWarning, newTitle: text})
             }
         };
 
-        let styleIsdone = () => this.props.task.status === 2 ? style.todoListTaskDone: style.todoListTask;
+        let styleIsdone = () => this.props.task.completed ? style.todoListTaskDone: style.todoListTask;
 
-        let isChecked = this.props.task.status !== 0;
         return (
 
                 <div className={styleIsdone()}>
                     <input
                         onChange={checkBoxClick}
                         type="checkbox"
-                        checked={isChecked}/>
+                        checked={this.props.task.completed}/>
 
                     { this.state.editMode
                         ? <input
                             onKeyPress={confirmChangeOnEnter}
                             className={this.state.ifWarning}
                             autoFocus={true}
-                            value={this.props.task.title}
-                            onChange={taskChange}
+                            value={this.state.newTitle}
+                            onChange={taskTitleChange}
                             onBlur={this.deactivateEditMode}
                         />
                         : <span
                         onClick={this.activateEditMode}
                     >{this.props.task.title}</span>}
-                    <span>{' id= '+ this.props.task.status}</span>
+                    <span>{' done '+ this.props.task.status}</span>
                     <span>{this.props.task.priority}</span>
                     <button className={style.deleteTask} onClick={()=>{this.props.deleteTask(this.props.task.id)}}>x</button>
                 </div>
