@@ -1,14 +1,31 @@
 .todoListTask
 {
+    box-sizing: border-box;
+    margin-top: 4px;
+    padding: 10px 15px;
+
+    border-radius: 5px;
+    color: olive;
+    border: darkolivegreen solid 1px;
+
     position: relative;
 
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-
-    composes: todoListTask from './../../App.css';
-    grid-template-columns: 15px 1fr 90px 90px 45px;
+    min-width: 5rem;
 }
-
+.body {
+    margin: 15px;
+    padding-right: 22px;
+    background-color: #191919;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 .todoListTask span
 {
     margin-left: 15px;
@@ -19,7 +36,6 @@
     color: olive;
     border: darkorange solid 1px;
 
-    composes: todoListTask from './../../App.css';
     composes: todoListTask;
 }
 
@@ -45,6 +61,9 @@
 }
 .deleteTask
 {
+    position: absolute;
+    right: 5px;
+    top: 5px;
     box-sizing: border-box;
     padding: 2px 4px;
 }
