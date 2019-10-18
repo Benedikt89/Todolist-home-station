@@ -11,14 +11,15 @@
 {
     position: relative;
 
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
 
     width: 400px;
     margin: 20px;
 
     box-shadow: 0 0 5px 3px #60ea95;
 
-    grid-template-areas: 'header' 'tasks' 'bar';
 }
 
 .todoList > div

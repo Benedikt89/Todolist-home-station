@@ -42,15 +42,14 @@ class TodoTask extends React.Component {
             }
         };
 
-        let styleIsdone = () => this.props.task.completed ? style.todoListTaskDone: style.todoListTask;
+        let styleIsdone = this.props.task.completed ? style.todoListTaskDone: style.todoListTask;
 
         return (
 
-                <div className={styleIsdone()}>
-                    <input
-                        onChange={checkBoxClick}
-                        type="checkbox"
-                        checked={this.props.task.completed}/>
+            <div>
+                <div className={styleIsdone}>
+                    <button className={style.deleteTask} onClick={()=>{this.props.deleteTask(this.props.task.id)}}>x</button>
+
 
                     { this.state.editMode
                         ? <input
@@ -61,13 +60,22 @@ class TodoTask extends React.Component {
                             onChange={taskTitleChange}
                             onBlur={this.deactivateEditMode}
                         />
-                        : <span
+                        : <span className={style.body}
                         onClick={this.activateEditMode}
                     >{this.props.task.title}</span>}
-                    <span>{' done '+ this.props.task.status}</span>
-                    <span>{this.props.task.priority}</span>
-                    <button className={style.deleteTask} onClick={()=>{this.props.deleteTask(this.props.task.id)}}>x</button>
+
+                    <div className={style.row}>
+                        <input
+                            onChange={checkBoxClick}
+                            type="checkbox"
+                            checked={this.props.task.completed}
+                        />
+                        <span>{' done '+ this.props.task.status}</span>
+                        <span>{this.props.task.priority}</span>
+                    </div>
+
                 </div>
+            </div>
 
 
         );
