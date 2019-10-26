@@ -1,27 +1,41 @@
 import React from 'react';
 import '../../App.css';
 import TodoTask from "./TodoTask";
+import {Droppable} from "react-beautiful-dnd";
+
+export const getListStyle = isDraggingOver => ({
+    background: isDraggingOver ? '#0a0a0a' : 'black',
+});
 
 class TodoTasks extends React.Component {
 
 
-    render = (props) => {
+    render = () => {
 
         let tasksElements = this.props.tasks.map(
-            task => <TodoTask
-                task = {task}
-                deleteTask = {this.props.deleteTask}
+            (task, index) => <TodoTask
+                key={task.id}
+                task={task}
+                index={index}
+                deleteTask={this.props.deleteTask}
                 changeStatus={this.props.changeStatus}
                 changeTitle={this.props.changeTitle}
             />
         );
 
         return (
-            <div className="todoListTasks">
+            <Droppable droppableId={this.props.dragId}>
+                {(provided, snapshot) => (
+                    <div ref={provided.innerRef}
+                         style={getListStyle(snapshot.isDraggingOver)}
+                         className="todoListTasks"
+                    >
+                        {tasksElements}
 
-                {tasksElements}
-
-            </div>
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
 
         );
     }

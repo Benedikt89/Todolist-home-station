@@ -5,6 +5,7 @@ import Header from "./Elements/Header/Header";
 import TodoTasks from "./Elements/Tasks/TodoTasks";
 import {addNewTask, changeTask, deleteList, deleteTask, getTasks, changeList} from "./Redux/listsReducer";
 import {connect} from "react-redux";
+import {DragDropContext} from "react-beautiful-dnd";
 
 class TodoList extends React.Component {
 
@@ -34,9 +35,12 @@ class TodoList extends React.Component {
         this.setState(state);
     };
 
+
     state = {
+        tasksForDrop: [],
         selectedFilter: 'All',
     };
+
 
     changeTask =(taskId, obj) => {
         let newTask = this.props.tasks.find(task => {
@@ -68,9 +72,43 @@ class TodoList extends React.Component {
         }
     };
 
+    onDragEnd = result => {
+        debugger;
+        const { source, destination, draggableId} = result;
+
+        if (!destination) {
+            return;
+        }
+        // droppableId: "cf3e1825-bf07-4df5-8bca-105ffbaf0248"
+        // index: 1
+        // __proto__: Object
+        // draggableId: "7829a5db-3d8b-4678-a183-f697135a9727"
+        // mode: "FLUID"
+        // reason: "DROP"
+        // source: {index: 0,
+            if (source.droppableId === destination.droppableId) {
+                this.changeTask(draggableId, {order: -destination.index});
+
+        } else {
+
+        }
+    };
+
     render = () => {
 
         let tasks = this.props.tasks === undefined ? [] : this.props.tasks;
+
+        tasks.sort((a, b)=>{return b.order-a.order}).filter(t => {
+
+            if (this.state.selectedFilter === 'Active') {
+                return t.completed === false;
+            }else if (this.state.selectedFilter === 'Completed') {
+                return t.completed === true;
+            } else{
+                return true;
+            }
+        });
+
         return (
 
                 <div className="todoList">
@@ -83,21 +121,15 @@ class TodoList extends React.Component {
 
                     />
 
+                    <DragDropContext onDragEnd={this.onDragEnd}>
                     <TodoTasks
+                        dragId = {this.props.id}
                         changeTitle={this.changeTitle}
                         changeStatus={this.changeStatus}
                         deleteTask={(taskId)=>{this.props.deleteTask(this.props.id, taskId)}}
-                        tasks={tasks.filter(t => {
-
-                    if (this.state.selectedFilter === 'Active') {
-                        return t.completed === false;
-                    }else if (this.state.selectedFilter === 'Completed') {
-                        return t.completed === true;
-                    } else{
-                        return true;
-                    }
-                    })}
+                        tasks={tasks}
                         />
+                    </DragDropContext>
                     <Footer
                         buttonFilter={this.buttonFilter}
                         selectedFilter={this.state.selectedFilter}/>

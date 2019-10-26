@@ -1,5 +1,6 @@
 import React from 'react';
 import style from './TodoTask.module.css'
+import DraggableItemWrapper from './../../drag_drop/DraggabbleItemWrapper'
 
 class TodoTask extends React.Component {
 
@@ -46,7 +47,10 @@ class TodoTask extends React.Component {
 
         return (
 
-            <div>
+            <DraggableItemWrapper
+                draggableId={this.props.task.id}
+                index={this.props.index}>
+
                 <div className={styleIsdone}>
                     <button className={style.deleteTask} onClick={()=>{this.props.deleteTask(this.props.task.id)}}>x</button>
 
@@ -70,12 +74,14 @@ class TodoTask extends React.Component {
                             type="checkbox"
                             checked={this.props.task.completed}
                         />
+                        <span>{this.props.task.order}</span>
                         <span>{' done '+ this.props.task.status}</span>
                         <span>{this.props.task.priority}</span>
                     </div>
 
                 </div>
-            </div>
+
+            </DraggableItemWrapper>
 
 
         );
