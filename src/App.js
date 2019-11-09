@@ -2,34 +2,15 @@ import React from 'react';
 import './App.css';
 import TodoList from "./TodoList";
 import AddItem from "./Elements/AddItem/AddItem";
-import {addNewList, getLists} from "./Redux/listsReducer";
+import {addNewList, getLists, moveTasks, reorder} from "./Redux/listsReducer";
 import { connect } from 'react-redux'
+import {DragDropContext} from "react-beautiful-dnd";
 
 class App extends React.Component {
 
     componentDidMount() {
         this.props.getLists();
     }
-    _saveState = () => {
-        let state = {
-            lists: this.props.lists,
-            textField: '',
-        };
-        let stateAsString = JSON.stringify(state);
-        localStorage.setItem("lists-state", stateAsString);
-    };
-    _restoreState = () => {
-        let state = {
-            lists: this.props.lists,
-            textField: '',
-        };
-
-        let stateAsString = localStorage.getItem("lists-state");
-        if (stateAsString != null) {
-            state = JSON.parse(stateAsString);
-        }
-        this.setState(state);
-    };
 
     addNewList = (title) => {
         this.props.addNewList(title);
@@ -37,6 +18,24 @@ class App extends React.Component {
 
     deleteList = () => {
 
+    };
+
+    onDragEnd = result => {
+        const {source, destination, draggableId} = result;
+
+
+        if (!destination) {
+            return;
+        }
+        if (source.droppableId === destination.droppableId) {
+            this.props.reorder(source, destination);
+
+        } else {
+            this.props.moveTasks(
+                source,
+                destination
+            );
+        }
     };
 
     render = () => {
@@ -49,11 +48,11 @@ class App extends React.Component {
                         addNewItem={this.addNewList}
                     />
                 </header>
-
-                <div className="App">
-                    {todoLists}
-                </div>
-
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <div className="App">
+                        {todoLists}
+                    </div>
+                </DragDropContext>
             </div>
         );
     }
@@ -64,6 +63,6 @@ const mapStateToProps = (state) => {
         lists: state.lists,
     }};
 
-const ConnectedApp = connect(mapStateToProps, {addNewList, getLists})(App);
+const ConnectedApp = connect(mapStateToProps, {addNewList, getLists, moveTasks, reorder})(App);
 
 export default ConnectedApp;

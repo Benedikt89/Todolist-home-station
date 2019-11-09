@@ -47,7 +47,7 @@ const listReducer = (state = initialState, action) => {
                     if (l.id === action.listId) {
                         return {
                             ...l,
-                            tasks: action.tasks
+                            tasks: action.tasks.sort((a, b)=>{return b.order-a.order})
                         }
                     } else {
                         return l
@@ -195,7 +195,7 @@ export const getLists = () => (dispatch) => {
             dispatch(_setLists(data));
         });
 };
-export const getTasks = (listId) => (dispatch) => {
+export const getTasks = (listId) => (dispatch, getState) => {
     todoListsAPI.getTasks(listId)
         .then( data => {
             dispatch(_setTasks(listId, data));
@@ -217,6 +217,52 @@ export const changeList = (listId, title) => (dispatch) => {
             }
         })
 };
+
+const getList = (listId) => (getState) =>{
+    let list = getState().lists.filter(l => l.id === listId);
+    return [...list[0].tasks]
+};
+
+export const reorder = (source, destination) => (dispatch, getState) => {
+    const lists = getState().lists.filter(l =>  l.id === source.droppableId);
+    const result = lists[0].tasks;
+    const [removed] = result.splice(source.index, 1);
+    result.splice(destination.index, 0, removed);
+
+    result
+        .forEach((t, index) => {
+            if (index >= source.index || index >= destination.index) {
+                dispatch(changeTask(source.droppableId, {...t, order: -index}));
+            }
+        });
+};
+
+export const moveTasks = (source, destination) => (dispatch) => {
+    const sourceClone = Array.from(getList(source.droppableId));
+    const destClone = Array.from(getList(destination.droppableId));
+    const [removed] = sourceClone.splice(source.index, 1);
+
+    destClone.splice(destination.index, 0, removed);
+
+    sourceClone.forEach( (t, index) => {
+        if (index >= source.index || index >= destination.index) {
+            dispatch(changeTask(source.droppableId, {...t, order: -index}));
+        }
+    });
+    destClone.forEach((t, index) => {
+        if (index >= source.index || index >= destination.index) {
+            if (t.id === removed.id) {
+                dispatch(changeTask(destination.droppableId, {
+                    ...t, order: -index,
+                    listId: destination.droppableId
+                }));
+            } else {
+                dispatch(changeTask(destination.droppableId, {...t, order: -index}));
+            }
+        }
+    });
+};
+
     //
     // {addedDate: "2019-10-01T16:33:02.1501436Z"
     // id: "1d9d9554-2137-486c-afe9-5e4144cc07f8"
