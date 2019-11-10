@@ -218,11 +218,6 @@ export const changeList = (listId, title) => (dispatch) => {
         })
 };
 
-const getList = (listId) => (getState) =>{
-    let list = getState().lists.filter(l => l.id === listId);
-    return [...list[0].tasks]
-};
-
 export const reorder = (source, destination) => (dispatch, getState) => {
     const lists = getState().lists.filter(l =>  l.id === source.droppableId);
     const result = lists[0].tasks;
@@ -237,9 +232,9 @@ export const reorder = (source, destination) => (dispatch, getState) => {
         });
 };
 
-export const moveTasks = (source, destination) => (dispatch) => {
-    const sourceClone = Array.from(getList(source.droppableId));
-    const destClone = Array.from(getList(destination.droppableId));
+export const moveTasks = (source, destination) => (dispatch, getState) => {
+    const sourceClone = Array.from(getState().lists.filter(l =>  l.id === source.droppableId)[0].tasks);
+    const destClone = Array.from(getState().lists.filter(l =>  l.id === destination.droppableId)[0].tasks);
     const [removed] = sourceClone.splice(source.index, 1);
 
     destClone.splice(destination.index, 0, removed);
