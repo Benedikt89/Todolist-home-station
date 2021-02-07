@@ -1,0 +1,26 @@
+.todoListFooter {
+    grid-area: bar;
+    grid-template-rows: 50px;
+    display: grid;
+}
+
+.button {
+    margin: 10px;
+}
+
+.active {
+    background-color: aqua;
+    margin: 10px;
+
+}
+
+.todoListFooter > * {
+    margin: 10px;
+
+}
+
+.teg {
+    border: darkgreen solid 1px;
+    border-radius: 5px;
+    padding: 5px 10px;
+}

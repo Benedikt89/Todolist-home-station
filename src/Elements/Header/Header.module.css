@@ -1,0 +1,41 @@
+
+.textField {
+    composes: textField from './../../App.css';
+    border: #00fdb5 solid 1px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 10px;
+    background-color: black;
+    color: white;
+}
+.error {
+    composes: textField;
+    border: red solid 1px;
+}
+.todoListHeader {
+    grid-area: header;
+    position: relative;
+}
+
+.todoListHeaderTitle {
+
+}
+
+.todoListNewTaskForm {
+    border: red solid 1px;
+    border-radius: 5px;
+    padding: 8px 15px;
+}
+
+.teg {
+    margin-left: 15px;
+    border: darkgreen solid 1px;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.deleteList {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border-color: red;
+}
